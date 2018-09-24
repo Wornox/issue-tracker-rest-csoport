@@ -1,5 +1,6 @@
 package hu.elte.issuetrackerrest.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Column;
@@ -16,7 +17,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
@@ -24,7 +24,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Issue {
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,14 +32,7 @@ public class Issue {
 
     @Column
     @NotNull
-    private String title;
-
-    @Column
-    private String description;
-
-    @Column
-    @NotNull
-    private String place;
+    private String text;
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -49,6 +42,9 @@ public class Issue {
     @UpdateTimestamp
     private LocalDateTime updated_at;
     
-    @OneToMany(mappedBy = "issue")
-    private List<Message> messages;
+
+    @ManyToOne
+    @JoinColumn
+    @JsonIgnore
+    private Issue issue;
 }
